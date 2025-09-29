@@ -26,10 +26,35 @@ function shuffle(array) {
 }
 
 function createBoard() {
-    const shuffledCard = shuffle(gameCards);
-    shuffledCards.forEach(emoji => {
+    const shuffledCard = shuffle(cardValues);
+
+    shuffledCards.forEach(value => {
         const card = document.createElement('div');
         card.classList.add('card');
-        card.dataset.emoji = emoji;
+        card.dataset.value = value;
 
-    const cardFront
+    const cardFront = document.createElement('div');
+    cardFront.classList.add('card-face, 'card-front');
+        cardFront.textContent = '?'; 
+
+        const cardBack = document.createElement('div');
+        cardBack.classList.add('card-face, 'card-back);
+        cardBack.textContent = value;
+
+        card.appendChild(cardFront);
+        card.appendChild(cardBack);
+
+        card.addEventListener('click', flippedCard);
+
+        gameBoard.appendChild(card);
+    });
+}
+
+function flippedCard() {
+    if (lockBoard || this.classList.contains('flip')) {
+        return;
+    }
+
+    this.classList.add('flip');
+    flippedCards.push
+}
