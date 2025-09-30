@@ -1,4 +1,5 @@
-document.addEventListener('DOMcontentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
+
     const gameBoard = document.getElementById('game-board');
     const colors = [
         '#ff5733', '#33ff57', '#3357ff', '#ff33a1',
@@ -9,97 +10,95 @@ document.addEventListener('DOMcontentLoaded', () => {
     let matchedPairs = 0;
     let lockBoard = false;
 
-const gameBoard = document.getElementById('game-board');
+    function shuffle(array) {
+        let currentIndex = array.length;
+        let randomIndex;
 
-function shuffle(array) {
-    let currentIndex = array.length;
-    let randomIndex;
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
 
-    while (currentIndex !== 0) {
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        [array[currentIndex], array[randomIndex]] = [
-            array[randomIndex], array[currentIndex]];
-    }
-    return array;
-}
-
-function createBoard() {
-    const shuffledCard = shuffle(cardValues);
-
-    shuffledCards.forEach(value => {
-        const card = document.createElement('div');
-        card.classList.add('card');
-        card.dataset.value = value;
-
-    const cardFront = document.createElement('div');
-    cardFront.classList.add('card-face, 'card-front');
-        cardFront.textContent = '?'; 
-
-        const cardBack = document.createElement('div');
-        cardBack.classList.add('card-face, 'card-back);
-        cardBack.textContent = value;
-
-        card.appendChild(cardFront);
-        card.appendChild(cardBack);
-
-        card.addEventListener('click', flippedCard);
-
-        gameBoard.appendChild(card);
-    });
-}
-
-function flippedCard() {
-    if (lockBoard || this.classList.contains('flip')) {
-        return;
+            [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+        }
+        return array;
     }
 
-    this.classList.add('flip');
-    flippedCards.push(this);
+    function createBoard() {
+        const shuffledCards = shuffle(cardColors);
 
-    if (flippedCards.length === 2) {
-        checkForMatch();
-    }
-}
+        shuffledCards.forEach(value => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.value = value;
 
-function checkForMatch() {
-    const [card1, card2] = flippedCards;
-    const isMatch = card1.dataset.value === card2.dataset.value;
+            const cardFront = document.createElement('div');
+            cardFront.classList.add('card-face', 'card-front');
+            cardFront.textContent = '?';
 
-    isMatch ? disableCards() : unflipCards();
-}
+            const cardBack = document.createElement('div');
+            cardBack.classList.add('card-face', 'card-back');
+            cardBack.style.backgroundColor = value;
 
-function disableCards() {
-    flippedCards.forEach(card => {
-        card.removeEventListener('click', flipCard);
-    });
-    
-    matchedPairs++;
-    resetBoard();
+            card.appendChild(cardFront);
+            card.appendChild(cardBack);
+            card.addEventListener('click', flipCard);
 
-    if (matchedPairs === emojis.length) {
-        setTimeout(() => {
-            alert('Parabéns, você venceu!');
-        }, 500);
-    }
-}
-
-function unflipCards() {
-    lockBoard = true;
-
-    setTimeout(() => {
-        flippedCards.forEach(card => {
-            card.classList.remove('flip'); 
+            gameBoard.appendChild(card);
         });
-        
-        resetBoard();
-    }, 1200);
-}
-    
-function resetBoard() {
-    flippedCards = [];
-    lockBoard = false;
-}
+    }
 
-createBoard();
+    function flipCard() {
+        if (lockBoard || this.classList.contains('flip')) {
+            return;
+        }
+
+        this.classList.add('flip');
+        flippedCards.push(this);
+
+        if (flippedCards.length === 2) {
+            checkForMatch();
+        }
+    }
+
+    function checkForMatch() {
+        const [card1, card2] = flippedCards;
+        const isMatch = card1.dataset.value === card2.dataset.value;
+
+        isMatch ? disableCards() : unflipCards();
+    }
+
+    function disableCards() {
+        flippedCards.forEach(card => {
+            card.removeEventListener('click', flipCard);
+        });
+
+        matchedPairs++;
+        resetBoard();
+
+        if (matchedPairs === colors.length) {
+            setTimeout(() => {
+                alert('Parabéns, você venceu!');
+            }, 500);
+        }
+    }
+
+    function unflipCards() {
+        lockBoard = true;
+
+        setTimeout(() => {
+            flippedCards.forEach(card => {
+                card.classList.remove('flip');
+            });
+            resetBoard();
+        }, 1200);
+    }
+
+    function resetBoard() {
+        flippedCards = [];
+        lockBoard = false;
+    }
+
+    createBoard();
+
+});
