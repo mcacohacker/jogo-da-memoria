@@ -56,5 +56,50 @@ function flippedCard() {
     }
 
     this.classList.add('flip');
-    flippedCards.push
+    flippedCards.push(this);
+
+    if (flippedCards.length === 2) {
+        checkForMatch();
+    }
 }
+
+function checkForMatch() {
+    const [card1, card2] = flippedCards;
+    const isMatch = card1.dataset.value === card2.dataset.value;
+
+    isMatch ? disableCards() : unflipCards();
+}
+
+function disableCards() {
+    flippedCards.forEach(card => {
+        card.removeEventListener('click', flipCard);
+    });
+    
+    matchedPairs++;
+    resetBoard();
+
+    if (matchedPairs === emojis.length) {
+        setTimeout(() => {
+            alert('Parabéns, você venceu!');
+        }, 500);
+    }
+}
+
+function unflipCards() {
+    lockBoard = true;
+
+    setTimeout(() => {
+        flippedCards.forEach(card => {
+            card.classList.remove('flip'); 
+        });
+        
+        resetBoard();
+    }, 1200);
+}
+    
+function resetBoard() {
+    flippedCards = [];
+    lockBoard = false;
+}
+
+createBoard();
