@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const cardBack = document.createElement('div');
             cardBack.classList.add('card-face', 'card-back');
-            cardBack.style.backgroundColor = value;
+            // O verso da carta recebe a cor
+            cardBack.style.backgroundColor = value; 
 
             card.appendChild(cardFront);
             card.appendChild(cardBack);
@@ -88,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         setTimeout(() => {
             flippedCards.forEach(card => {
+                // ✅ O JS remove a classe 'flip'
                 card.classList.remove('flip');
             });
             resetBoard();
@@ -100,5 +102,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     createBoard();
-
-});
+} );
